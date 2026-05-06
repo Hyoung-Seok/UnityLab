@@ -13,7 +13,7 @@ public class Bullet : MonoBehaviour
     
     public void Init(Vector3 dir, Vector3 pos, float velocity, ObjectPool<Bullet> pool)
     {
-        _dir = dir;
+        _dir = dir.normalized;
         transform.position = pos;
         _velocity = velocity;
         _pool = pool;

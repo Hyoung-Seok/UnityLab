@@ -17,6 +17,10 @@ public class BulletSpawner : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(Instance.gameObject);
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void AddBullet(Bullet bullet)
@@ -27,7 +31,10 @@ public class BulletSpawner : MonoBehaviour
             CreateBullet,
             OnGetBullet,
             OnReleaseBullet,
-            OnDestroyBullet
+            OnDestroyBullet,
+            collectionCheck: true,
+            defaultCapacity: 20,
+            maxSize: 100
             );
     }
 

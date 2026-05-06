@@ -16,7 +16,6 @@ public class Player : MonoBehaviour
         _aimPlane = new Plane(Vector3.up, transform.position.y);
         
         _gameInput = new GameInput();
-        _gameInput.Enable();
     }
 
     private void Update()
@@ -38,14 +37,21 @@ public class Player : MonoBehaviour
 
     private void OnEnable()
     {
-        _gameInput.Player.Fire.started += OnStartFire;
+        _gameInput.Player.Enable();
+        
         _gameInput.Player.Fire.performed += OnStartFire;
     }
 
     private void OnDisable()
     {
-        _gameInput.Player.Fire.started -= OnStartFire;
+        _gameInput.Player.Disable();
+        
         _gameInput.Player.Fire.performed -= OnStartFire;
+    }
+
+    private void OnDestroy()
+    {
+        _gameInput.Dispose();
     }
 
     private void OnStartFire(InputAction.CallbackContext _)
