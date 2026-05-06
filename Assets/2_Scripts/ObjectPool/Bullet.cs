@@ -1,33 +1,48 @@
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Bullet : MonoBehaviour
+public abstract class Bullet : MonoBehaviour
 {
+    protected BulletData BulletData;
+    
     private IObjectPool<Bullet> _pool;
     
     private Vector3 _dir;
-    private float _velocity;
+    private float _curTime = 0f;
 
-    private float _despawnTime;
-    private const float LIFE_TIME = 5f;
+    protected abstract void OnHit(GameObject other);
     
-    public void Init(Vector3 dir, Vector3 pos, float velocity, IObjectPool<Bullet> pool)
+    public void Init(BulletData bulletData, Vector3 dir, Vector3 pos)
     {
-        _dir = dir.normalized;
+        BulletData = bulletData;
+        _dir = dir;
+        _curTime = 0f;
+        
         transform.position = pos;
-        _velocity = velocity;
-        _pool = pool;
+        transform.rotation = Quaternion.LookRotation(dir);
+    }
 
-        _despawnTime = Time.time + LIFE_TIME;
+    public void SetPool(IObjectPool<Bullet> pool)
+    {
+        _pool = pool;    
     }
     
     private void Update()
     {
-        transform.position += _dir * (_velocity * Time.deltaTime);
+        transform.position += _dir * (BulletData.Velocity * Time.deltaTime);
+        _curTime += Time.deltaTime;
 
-        if (Time.time >= _despawnTime)
+        if (_curTime >= BulletData.LifeTime)
         {
             _pool.Release(this);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Enemy"))
+        {
+            OnHit(other.gameObject);
         }
     }
 }
