@@ -244,6 +244,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   equippedWeapon: {fileID: 331010460}
+  inventory:
+  - {fileID: 11400000, guid: c5573073a36129c44a9a81cb64775f43, type: 2}
+  - {fileID: 11400000, guid: 45905abce95538d4aa622ccdc21129aa, type: 2}
 --- !u!136 &331010455
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -382,7 +385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bc1825a8dbb6474bbf9f2d988208205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
-  loadedBullet: {fileID: 11400000, guid: c5573073a36129c44a9a81cb64775f43, type: 2}
   fireDelay: 0.3
 --- !u!1 &482401341
 GameObject:
