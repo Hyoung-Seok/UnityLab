@@ -3,7 +3,7 @@ using UnityEngine.Pool;
 
 public class Bullet : MonoBehaviour
 {
-    private ObjectPool<Bullet> _pool;
+    private IObjectPool<Bullet> _pool;
     
     private Vector3 _dir;
     private float _velocity;
@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviour
     private float _despawnTime;
     private const float LIFE_TIME = 5f;
     
-    public void Init(Vector3 dir, Vector3 pos, float velocity, ObjectPool<Bullet> pool)
+    public void Init(Vector3 dir, Vector3 pos, float velocity, IObjectPool<Bullet> pool)
     {
         _dir = dir.normalized;
         transform.position = pos;

@@ -6,9 +6,10 @@ using UnityEngine.Pool;
 public class BulletSpawner : MonoBehaviour
 {
     public static BulletSpawner Instance { get; private set; }
-    public ObjectPool<Bullet> BulletPool { get; private set; }
+    public IObjectPool<Bullet> BulletPool => _pool;
 
     private Bullet _curBullet;
+    private ObjectPool<Bullet> _pool;
     
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class BulletSpawner : MonoBehaviour
     {
         _curBullet = bullet;
 
-        BulletPool = new ObjectPool<Bullet>(
+        _pool = new ObjectPool<Bullet>(
             CreateBullet,
             OnGetBullet,
             OnReleaseBullet,
