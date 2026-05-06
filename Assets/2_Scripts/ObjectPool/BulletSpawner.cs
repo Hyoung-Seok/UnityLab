@@ -6,10 +6,7 @@ using UnityEngine.Pool;
 public class BulletSpawner : MonoBehaviour
 {
     public static BulletSpawner Instance { get; private set; }
-    public IObjectPool<Bullet> BulletPool => _pool;
-
-    private Bullet _curBullet;
-    private ObjectPool<Bullet> _pool;
+    private Dictionary<BulletData, IObjectPool<Bullet>> _pool;
     
     private void Awake()
     {
@@ -22,29 +19,41 @@ public class BulletSpawner : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        
+        _pool = new Dictionary<BulletData, IObjectPool<Bullet>>();
     }
 
-    public void AddBullet(Bullet bullet)
+    public IObjectPool<Bullet> AddBullet(BulletData data)
     {
-        _curBullet = bullet;
-
-        _pool = new ObjectPool<Bullet>(
-            CreateBullet,
+        if(_pool.TryGetValue(data, out var bulletPool))
+        {
+            return bulletPool;
+        }
+        
+        IObjectPool<Bullet> pool = null;
+        
+        pool = new ObjectPool<Bullet>(
+            createFunc: () => 
+            {
+                var obj = Instantiate(data.BulletPrefab, transform);
+                obj.SetPool(pool);
+                return obj;
+            },
             OnGetBullet,
             OnReleaseBullet,
-            OnDestroyBullet,
-            collectionCheck: true,
-            defaultCapacity: 20,
-            maxSize: 100
+            OnDestroyBullet
             );
+        
+        _pool.Add(data, pool);
+        return pool;
     }
 
-    private Bullet CreateBullet()
+    public Bullet GetBullet(BulletData data)
     {
-        var obj = Instantiate(_curBullet, transform);
-        return obj;
+        var pool = AddBullet(data);
+        return pool.Get();
     }
-
+    
     private void OnGetBullet(Bullet bullet)
     {
         bullet.gameObject.SetActive(true);

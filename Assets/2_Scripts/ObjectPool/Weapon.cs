@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-    [SerializeField] private Bullet currentBullet;
+    [SerializeField] private BulletData loadedBullet;
     [SerializeField] private float fireDelay;
     
     private BulletSpawner _bulletSpawner;
@@ -12,17 +12,21 @@ public class Weapon : MonoBehaviour
     private void Start()
     {
         _bulletSpawner = BulletSpawner.Instance;
-        
-        _bulletSpawner.AddBullet(currentBullet);
+        SwapBullet(loadedBullet);
     }
 
     public void Fire()
     {
         if (Time.time - _lastFireTime < fireDelay) return;
         
-        var bullet = _bulletSpawner.BulletPool.Get();
-        bullet.Init(transform.forward, transform.position, 10f, _bulletSpawner.BulletPool);
+        var bullet = BulletSpawner.Instance.GetBullet(loadedBullet);
+        bullet.Init(loadedBullet, transform.forward, transform.position);
         
         _lastFireTime = Time.time;
+    }
+
+    public void SwapBullet(BulletData bullet)
+    {
+        loadedBullet = bullet;
     }
 }
