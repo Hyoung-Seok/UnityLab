@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
 
     private void OnStartReload(InputAction.CallbackContext _)
     {
-        _curInventoryIndex = (_curInventoryIndex + 1 >= inventory.Count) ? 0 : _curInventoryIndex + 1;
+        _curInventoryIndex = (_curInventoryIndex + 1) % inventory.Count;
         equippedWeapon.SwapBullet(inventory[_curInventoryIndex]);
     }
 }

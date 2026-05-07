@@ -10,7 +10,7 @@ public abstract class Bullet : MonoBehaviour
     private Vector3 _dir;
     private float _curTime = 0f;
 
-    protected abstract void OnHit(GameObject other);
+    protected abstract bool OnHit(GameObject other);
     
     public void Init(BulletData bulletData, Vector3 dir, Vector3 pos)
     {
@@ -24,7 +24,7 @@ public abstract class Bullet : MonoBehaviour
 
     public void SetPool(IObjectPool<Bullet> pool)
     {
-        _pool = pool;    
+        _pool = pool;
     }
     
     private void Update()
@@ -42,7 +42,7 @@ public abstract class Bullet : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            OnHit(other.gameObject);
+            if(OnHit(other.gameObject)) _pool.Release(this);
         }
     }
 }

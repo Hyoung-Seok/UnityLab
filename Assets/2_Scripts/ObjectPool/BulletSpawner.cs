@@ -18,12 +18,19 @@ public class BulletSpawner : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
         }
         
         _pool = new Dictionary<BulletData, IObjectPool<Bullet>>();
     }
 
-    public IObjectPool<Bullet> AddBullet(BulletData data)
+    public Bullet GetBullet(BulletData data)
+    {
+        var pool = GetOrCreateBullet(data);
+        return pool.Get();
+    }
+    
+    private IObjectPool<Bullet> GetOrCreateBullet(BulletData data)
     {
         if(_pool.TryGetValue(data, out var bulletPool))
         {
@@ -41,17 +48,13 @@ public class BulletSpawner : MonoBehaviour
             },
             OnGetBullet,
             OnReleaseBullet,
-            OnDestroyBullet
+            OnDestroyBullet,
+            defaultCapacity: 10,
+            maxSize: 100
             );
         
         _pool.Add(data, pool);
         return pool;
-    }
-
-    public Bullet GetBullet(BulletData data)
-    {
-        var pool = AddBullet(data);
-        return pool.Get();
     }
     
     private void OnGetBullet(Bullet bullet)
