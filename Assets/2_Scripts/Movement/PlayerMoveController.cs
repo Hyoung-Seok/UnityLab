@@ -18,10 +18,7 @@ public class PlayerMoveController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        var v = _dir * speed;
-        v.y = rb.linearVelocity.y;
-
-        rb.linearVelocity = v;
+        rb.AddForce(_dir * speed);
     }
 
     private void TransformMove(float h, float v)
@@ -33,5 +30,13 @@ public class PlayerMoveController : MonoBehaviour
     private void RigidbodyMovePosition()
     {
         rb.MovePosition(rb.position + _dir * (speed * Time.fixedDeltaTime));
+    }
+    
+    private void RigidbodyLinearVelocity()
+    {
+        var v = _dir * speed;
+        v.y = rb.linearVelocity.y;
+
+        rb.linearVelocity = v;
     }
 }
