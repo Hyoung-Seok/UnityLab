@@ -18,7 +18,10 @@ public class PlayerMoveController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        RigidbodyMovePosition();
+        var v = _dir * speed;
+        v.y = rb.linearVelocity.y;
+
+        rb.linearVelocity = v;
     }
 
     private void TransformMove(float h, float v)
